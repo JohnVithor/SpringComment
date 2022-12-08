@@ -10,16 +10,12 @@ import java.util.Map;
 
 @Service
 public class CommentsService {
-    private final UserServiceInterface userService;
-    private final IssueServiceInterface issueService;
+    private final CommentResilience resilience;
     private final CommentRepository repository;
 
     @Autowired
-    public CommentsService(UserServiceInterface userServiceInterface,
-                           IssueServiceInterface issueServiceInterface,
-                           CommentRepository repository) {
-        this.issueService = issueServiceInterface;
-        this.userService = userServiceInterface;
+    public CommentsService(CommentResilience resilience, CommentRepository repository) {
+        this.resilience = resilience;
         this.repository = repository;
     }
 
@@ -30,15 +26,13 @@ public class CommentsService {
         if (commentEntity.getUserId() == null) {
             throw new RuntimeException("Usuário não informado");
         }
-        ResponseEntity<Map<String, String>> responseUser = userService.getUser(commentEntity.getUserId());
-        if (!responseUser.getStatusCode().is2xxSuccessful()) {
+        if (!resilience.isUserValid(commentEntity.getUserId())) {
             throw new RuntimeException("Usuário informado não existe");
         }
         if (commentEntity.getIssueId() == null) {
             throw new RuntimeException("Issue não informada");
         }
-        ResponseEntity<Map<String, String>> responseIssue = issueService.getIssue(commentEntity.getIssueId());
-        if (!responseIssue.getStatusCode().is2xxSuccessful()) {
+        if (!resilience.isIssueValid(commentEntity.getIssueId())) {
             throw new RuntimeException("Issue informada não existe");
         }
         if (commentEntity.getContent() == null) {

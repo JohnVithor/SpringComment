@@ -9,4 +9,10 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
     Page<CommentEntity> findByIssueIdIs(Long id, PageRequest pageRequest);
+
+    boolean existsByUserId(Long id);
+
+    boolean existsByIssueId(Long id);
+
+
 }
