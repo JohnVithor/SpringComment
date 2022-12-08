@@ -24,14 +24,14 @@ public class CommentResilience {
     }
 
     @CircuitBreaker(name = "isUserValid_cb", fallbackMethod = "isUserKnown")
-    @Bulkhead(name = "isUserValid_bh", fallbackMethod = "isUserKnown")
+    @Bulkhead(name = "isUserValid_bh", fallbackMethod = "isUserKnown", type = Bulkhead.Type.THREADPOOL)
     public boolean isUserValid(Long id) {
         ResponseEntity<Map<String, String>> response = userService.getUser(id);
         return response.getStatusCode().is2xxSuccessful();
     }
 
     @CircuitBreaker(name = "isIssueValid_cb", fallbackMethod = "isIssueKnown")
-    @Bulkhead(name = "isIssueValid_bh", fallbackMethod = "isIssueKnown")
+    @Bulkhead(name = "isIssueValid_bh", fallbackMethod = "isIssueKnown", type = Bulkhead.Type.THREADPOOL)
     public boolean isIssueValid(Long id) {
         ResponseEntity<Map<String, String>> response = issueService.getIssue(id);
         return response.getStatusCode().is2xxSuccessful();
@@ -47,7 +47,7 @@ public class CommentResilience {
             System.err.println("Usuário foi encontrado, portanto é válido");
             return true;
         } else {
-            System.err.println("Não foi encontrado comment criado pelo usuário de id="+id);
+            System.err.println("Não foi encontrado comment criado pelo usuário de id=" + id);
             return false;
         }
     }
@@ -62,7 +62,7 @@ public class CommentResilience {
             System.err.println("Issue foi encontrado, portanto é válida");
             return true;
         } else {
-            System.err.println("Não foi encontrado comment associado a issue de id="+id);
+            System.err.println("Não foi encontrado comment associado a issue de id=" + id);
             return false;
         }
     }

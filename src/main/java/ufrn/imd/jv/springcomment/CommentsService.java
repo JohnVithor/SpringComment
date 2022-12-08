@@ -6,8 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
 public class CommentsService {
     private final CommentResilience resilience;
