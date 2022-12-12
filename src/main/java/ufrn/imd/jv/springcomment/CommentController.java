@@ -19,7 +19,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<CommentEntity> createIssue(@RequestBody CommentEntity commentEntity) {
+    public ResponseEntity<CommentEntity> createComment(@RequestBody CommentEntity commentEntity) {
         return ResponseEntity.ok(service.save(commentEntity));
     }
 
@@ -30,8 +30,8 @@ public class CommentController {
         return service.getPage(page.orElse(0), limit.orElse(10));
     }
 
-    @GetMapping(path = "column/{id}")
-    public ResponseEntity<Page<CommentEntity>> getBoardId(@PathVariable Long id,
+    @GetMapping(path = "issue/{id}")
+    public ResponseEntity<Page<CommentEntity>> getByIssueId(@PathVariable Long id,
                                                           @RequestParam(name = "pg", required = false) Optional<Integer> page,
                                                           @RequestParam(name = "lim", required = false) Optional<Integer> limit) {
         return service.getByIssueId(id, page.orElse(0), limit.orElse(10));
