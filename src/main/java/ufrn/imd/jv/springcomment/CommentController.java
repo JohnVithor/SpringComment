@@ -32,8 +32,8 @@ public class CommentController {
 
     @GetMapping(path = "issue/{id}")
     public ResponseEntity<Page<CommentEntity>> getByIssueId(@PathVariable Long id,
-                                                          @RequestParam(name = "pg", required = false) Optional<Integer> page,
-                                                          @RequestParam(name = "lim", required = false) Optional<Integer> limit) {
+                                                            @RequestParam(name = "pg", required = false) Optional<Integer> page,
+                                                            @RequestParam(name = "lim", required = false) Optional<Integer> limit) {
         return service.getByIssueId(id, page.orElse(0), limit.orElse(10));
     }
 
